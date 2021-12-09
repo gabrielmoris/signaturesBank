@@ -19,8 +19,13 @@ module.exports.getSignature = () => {
 };
 
 module.exports.addSignature = (signerName, signerSurname, signerSignature) => {
+    console.log(signerName, signerSurname, signerSignature);
     const q = `INSERT INTO signatures (first, last, signature) Values($1,$2,$3)`;
     const params = [signerName, signerSurname, signerSignature];
     return db.query(q, params);
 };
+
+// module.exports.requestData = ()=>{
+//     const q = "HOLA"
+// }
 

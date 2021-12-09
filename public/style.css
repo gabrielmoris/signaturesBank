@@ -1,0 +1,7 @@
+body {
+    background-color: rgba(32, 83, 30, 0.952);
+}
+
+#canv {
+    border: 1px dotted black;
+}
