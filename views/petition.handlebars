@@ -1,4 +1,9 @@
-<title>Help us to </title>
+<title>Store your signature in our signatures bank: </title>
+{{#if error}}
+    <h2 class="error">We couldnt add your signature to the bank. Make sure that
+        you fill all the inputs.</h2>
+{{/if}}
+
 <form method="POST">
     <input
         type="text"
@@ -8,12 +13,13 @@
     />
     <input type="text" name="last" placeholder="Surname" autocomplete="off" />
     <input
-        type="text"
+        id="sign"
+        type="hidden"
         name="signature"
         placeholder=" "
         autocomplete="off"
-    />//type="hidden"
-    <canvas id="canv" width="200" height="70" style=></canvas>
+    />
+    <canvas id="canv" width="400" height="140" style></canvas>
     <button type="submit">SIGN</button>
 </form>
 

@@ -19,13 +19,17 @@ module.exports.getSignature = () => {
 };
 
 module.exports.addSignature = (signerName, signerSurname, signerSignature) => {
-    console.log(signerName, signerSurname, signerSignature);
-    const q = `INSERT INTO signatures (first, last, signature) Values($1,$2,$3)`;
+    // console.log(signerName, signerSurname, signerSignature);
+    const q = `INSERT INTO signatures (first, last, signature) Values($1,$2,$3)
+    RETURNING id, first`;
     const params = [signerName, signerSurname, signerSignature];
     return db.query(q, params);
 };
 
+
+
 // module.exports.requestData = ()=>{
 //     const q = "HOLA"
 // }
-
+//REMEMBER EVERY DAY!
+//sudo service postgresql start

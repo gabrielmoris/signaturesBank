@@ -1,7 +1,12 @@
 body {
-    background-color: rgba(32, 83, 30, 0.952);
+    background-color: LightBlue;
 }
 
 #canv {
     border: 1px dotted black;
+}
+
+.error {
+    color: red;
+    font-weight: bolder;
 }
