@@ -1,5 +1,10 @@
 body {
     background-color: LightBlue;
+    display: grid;
+    grid-template-columns: 75%;
+    grid-template-rows: 50px, 1fr, 1fr, 1fr, 1fr;
+    justify-content: center;
+    justify-items: center;
 }
 
 #canv {

@@ -67,7 +67,7 @@ app.post("/petition", (req, res) => {
 
     db.addSignature(data.first, data.last, data.signature)
         .then((row) => {
-            console.log("signature added", row.rows[0].id);
+            // console.log("signature added", row.rows[0].id);
             req.session.canvas = row.rows[0].id;
             req.session.auth = true;
             res.redirect("/thanks");
