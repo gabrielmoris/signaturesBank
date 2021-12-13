@@ -135,13 +135,7 @@ app.post("/register", (req, res) => {
                     // console.log("user added", row.rows[0].id);
                     req.session.userId = row.rows[0].id;
                     // req.session.auth = true;
-                    db.didSign(row.rows[0].id).then((didSignResults) => {
-                        if (didSignResults.rows.length === 0) {
-                            res.redirect("/petition");
-                        } else {
-                            res.redirect("/thanks");
-                        }
-                    });
+                    res.redirect("/petition");
                 })
                 .catch((err) => {
                     console.log("Error ading User: ", err);
