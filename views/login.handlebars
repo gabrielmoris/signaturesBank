@@ -1,0 +1,19 @@
+<h1>I am LOGIN</h1>
+{{#if error}}
+    <h2 class="error">Error loging. Email or password are incorrect.</h2>
+{{/if}}
+<form method="POST" class="form">
+    <input
+        type="email"
+        name="email"
+        placeholder="email@email.com"
+        autocomplete="off"
+    />
+    <input
+        type="password"
+        name="password"
+        placeholder="*******"
+        autocomplete="off"
+    />
+    <button type="submit">LOGIN</button>
+</form>

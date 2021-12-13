@@ -4,6 +4,7 @@ const app = express();
 const db = require("./db");
 const { engine } = require("express-handlebars");
 const cookieSession = require("cookie-session");
+const { hash, compare } = require("./bc");
 //to prevent clickjacking
 app.use((req, res, next) => {
     res.setHeader("x-frame-options", "deny");
@@ -65,7 +66,7 @@ app.get("/signatures", (req, res) => {
 app.post("/petition", (req, res) => {
     const data = req.body;
 
-    db.addSignature(data.first, data.last, data.signature)
+    db.addSignature(data.signature)
         .then((row) => {
             // console.log("signature added", row.rows[0].id);
             req.session.canvas = row.rows[0].id;
@@ -114,9 +115,81 @@ app.get("/thanks", (req, res) => {
         res.redirect("/petition");
     }
 });
-//////////////////////////
+
 app.get("/", (req, res) => {
-    res.redirect("/petition");
+    res.redirect("/register");
+});
+
+app.get("/register", (req, res) => {
+    res.render("register", { layout: "main" });
+});
+
+app.post("/register", (req, res) => {
+    const data = req.body;
+    const userPw = data.password;
+
+    hash(userPw)
+        .then((hashedPw) => {
+            db.addUser(data.first, data.last, data.email, hashedPw)
+                .then((row) => {
+                    // console.log("user added", row.rows[0].id);
+                    req.session.userId = row.rows[0].id;
+                    // req.session.auth = true;
+                    db.didSign(row.rows[0].id).then((didSignResults) => {
+                        if (didSignResults.rows.length === 0) {
+                            res.redirect("/petition");
+                        } else {
+                            res.redirect("/thanks");
+                        }
+                    });
+                })
+                .catch((err) => {
+                    console.log("Error ading User: ", err);
+                    res.render("register", { error: true });
+                });
+            // console.log("hashedPW: ", hashedPw);
+        })
+        .catch((err) => {
+            console.log("Error ading User: ", err);
+            res.render("register", { error: true });
+        });
+});
+
+app.get("/login", (req, res) => {
+    res.render("login", { layout: "main" });
+});
+app.post("/login", (req, res) => {
+    const data = req.body;
+    // console.log(data);
+
+    //this is where I want to use the compare.
+    db.getUser(data.email)
+        .then(({ rows }) => {
+            console.log(rows);
+            return rows[0];
+        })
+        .then((results) =>
+            compare(data.password, results.password).then((match) => {
+                if (match === true) {
+                    // console.log(
+                    //     "The PW written and the Pw from Db match?",
+                    //     match
+                    // );
+                    req.session.userId = results.id;
+                    db.didSign(results.id).then((didSignResults) => {
+                        if (didSignResults.rows.length === 0) {
+                            res.redirect("/petition");
+                        } else {
+                            res.redirect("/thanks");
+                        }
+                    });
+                }
+            })
+        )
+        .catch((err) => {
+            console.log("Error ading User: ", err);
+            res.render("login", { error: true });
+        });
 });
 
 /////////////////////////

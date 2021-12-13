@@ -18,15 +18,37 @@ module.exports.getSignature = () => {
     return db.query(q);
 };
 
-module.exports.addSignature = (signerName, signerSurname, signerSignature) => {
+module.exports.addSignature = (signerSignature) => {
     // console.log(signerName, signerSurname, signerSignature);
-    const q = `INSERT INTO signatures (first, last, signature) Values($1,$2,$3)
-    RETURNING id, first`;
-    const params = [signerName, signerSurname, signerSignature];
+    const q = `INSERT INTO signatures (signature) Values($1)
+    RETURNING user_id`; //still need to add userId
+    const params = [signerSignature];
     return db.query(q, params);
 };
 
+module.exports.addUser = (
+    signerName,
+    signerSurname,
+    signerEmail,
+    signerPasword
+) => {
+    const q = `INSERT INTO users (first, last, email, password) Values($1,$2,$3,$4)
+    RETURNING id, first, password`;
+    const params = [signerName, signerSurname, signerEmail, signerPasword];
+    return db.query(q, params);
+};
 
+module.exports.getUser = (email) => {
+    const q = "SELECT email, password, id FROM users WHERE email = $1";
+    const params = [email];
+    return db.query(q, params);
+};
+
+module.exports.didSign = (id) => {
+    const q = "SELECT signature FROM signatures WHERE user_id = $1";
+    const params = [id];
+    return db.query(q, params);
+};
 
 // module.exports.requestData = ()=>{
 //     const q = "HOLA"

@@ -2,16 +2,45 @@ body {
     background-color: LightBlue;
     display: grid;
     grid-template-columns: 75%;
-    grid-template-rows: 50px, 1fr, 1fr, 1fr, 1fr;
+    grid-template-rows: 25% 50%;
     justify-content: center;
     justify-items: center;
 }
 
 #canv {
     border: 1px dotted black;
+    display: inherit;
 }
-
+.form {
+    display: grid;
+    justify-content: center;
+    justify-items: center;
+}
 .error {
     color: red;
     font-weight: bolder;
+    position: absolute;
+    margin-top: 5%;
+    margin-left: 10%;
+}
+/* .first-name {
+    margin-bottom: 10px;
+}
+
+.last-name {
+    margin-bottom: 50px;
+} */
+input {
+    margin-bottom: 10px;
+    width: 70%;
+    height: 40%;
+    font-size: 200%;
+    border-radius: 10px;
+    text-align: center;
+}
+button {
+    width: 80%;
+    height: 75%;
+    font-size: 150%;
+    border-radius: 10px;
 }

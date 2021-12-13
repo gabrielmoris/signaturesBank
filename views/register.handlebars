@@ -1,0 +1,28 @@
+<h1>I am register!</h1>
+{{#if error}}
+    <h2 class="error">Error in the process of register. Make sure that you fill
+        all the inputs.</h2>
+{{/if}}
+<form method="POST" class="form">
+    <input
+        class="first-name"
+        type="text"
+        name="first"
+        placeholder="first name"
+        autocomplete="off"
+    />
+    <input type="text" name="last" placeholder="Surname" autocomplete="off" />
+    <input
+        type="email"
+        name="email"
+        placeholder="email@email.com"
+        autocomplete="off"
+    />
+    <input
+        type="password"
+        name="password"
+        placeholder="*******"
+        autocomplete="off"
+    />
+    <button type="submit">SUBMIT</button>
+</form>
