@@ -38,21 +38,12 @@ app.get("/petition", (req, res) => {
 
 app.get("/signatures", (req, res) => {
     if (req.session.auth === true) {
-        db.getSignature()
+        db.getAllSignatures()
             .then(({ rows }) => {
-                let signers = [];
-                for (let i = 0; i < rows.length; i++) {
-                    let signerName = rows[i].first;
-                    let signerSurname = rows[i].last;
-                    signers.push(`${signerName} ${signerSurname}`);
-                }
-                // console.log(signers);
-                return signers;
-            })
-            .then((signers) => {
+                // console.log(rows.email)
                 res.render("signers", {
                     layout: "main",
-                    signatures: signers,
+                    signatures: rows,
                 });
             })
             .catch((err) =>
@@ -83,12 +74,13 @@ app.post("/petition", (req, res) => {
 });
 
 app.get("/thanks", (req, res) => {
-    // console.log(req.session.userId);
+  ///SI ENTRO DESDE LOGIN DOESNT WORK
     if (req.session.userId) {
         db.getSignature(req.session.userId)
             .then(({ rows }) => {
                 arrResult = [];
-                console.log(rows)
+                // console.log(rows);
+                //SOMEHOW NOW THE ARRAY WILL HAVE ONLY THE LENGTH OF 1... CHECK THIS LATER
                 arrResult.push(rows.length);
                 arrResult.push(rows[0].signature);
                 arrResult.push(rows[0].first);
@@ -167,9 +159,12 @@ app.post("/login", (req, res) => {
                     // );
                     req.session.userId = results.id;
                     db.didSign(results.id).then((didSignResults) => {
+                        // console.log(didSignResults.rows);
                         if (didSignResults.rows.length === 0) {
                             res.redirect("/petition");
                         } else {
+                            //NO ESTOY SEGURO DE ESTO
+                            // req.session.auth === true;
                             res.redirect("/thanks");
                         }
                     });
@@ -182,9 +177,39 @@ app.post("/login", (req, res) => {
         });
 });
 
-app.get("/profile",(req,res)=>{
-    res.render("profile")
-})
+app.get("/profile", (req, res) => {
+    res.render("profile");
+});
+
+app.post("/profile", (req, res) => {
+    const data = req.body;
+    // console.log(data);
+    const urlUser = `http\://${data.urlpage}`;
+    db.addUserProfile(data.age, urlUser, data.city, req.session.userId)
+        .then(() => res.redirect("/petition"))
+        .catch((err) => {
+            console.log("Error in adding data to profile: ", err);
+            res.render("profile", { error: true });
+        });
+});
+
+app.get("/signatures/:city", (req, res) => {
+    const requestedCity = req.params.city;
+    db.getUserByCity(requestedCity)
+        .then(({ rows }) => {
+            // console.log(rows.email)
+            res.render("signers", {
+                layout: "main",
+                signatures: rows,
+            });
+        })
+        .catch((err) =>
+            console.log(
+                "Sorry, I couldnt get signatures in /signatures/city ",
+                err
+            )
+        );
+});
 /////////////////////////
 
 app.listen(PORT, () => {

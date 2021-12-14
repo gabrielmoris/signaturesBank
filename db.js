@@ -20,6 +20,16 @@ module.exports.getSignature = (id) => {
     return db.query(q, params);
 };
 
+module.exports.getAllSignatures = () => {
+    const q = `SELECT users.id AS user_id, users.first AS first, users.last AS last, 
+        users.email AS email, signatures.signature AS signature, 
+        user_profiles.age AS age, user_profiles.url AS url, user_profiles.city AS city
+        FROM users 
+        FULL OUTER JOIN user_profiles ON users.id = user_profiles.user_id 
+        INNER JOIN signatures ON users.id = signatures.user_id`;
+    return db.query(q);
+};
+
 module.exports.addSignature = (cookie, signerSignature) => {
     // console.log(signerName, signerSurname, signerSignature);
     const q = `INSERT INTO signatures (user_id, signature) Values($1,$2)
@@ -64,8 +74,20 @@ module.exports.dataFromId = (id) => {
     return db.query(q, params);
 };
 
-module.exports.addUserProfile = (id) => {
-    const q = ``
-    const params = [id];
+module.exports.addUserProfile = (signerAge, signerUrl, signerCity, userId) => {
+    const q = `INSERT INTO user_profiles (age, url, city, user_id) Values($1,$2,LOWER($3),$4)`;
+    const params = [signerAge, signerUrl, signerCity, userId];
     return db.query(q, params);
-}
+};
+
+module.exports.getUserByCity = (city) => {
+    const q = `SELECT users.id AS user_id, users.first AS first, users.last AS last, 
+        users.email AS email, signatures.signature AS signature, 
+        user_profiles.age AS age, user_profiles.url AS url, user_profiles.city AS city
+        FROM users 
+        LEFT JOIN signatures ON users.id = signatures.user_id 
+        LEFT JOIN user_profiles ON users.id = user_profiles.user_id 
+        WHERE user_profiles.city = $1`;
+    const params = [city];
+    return db.query(q, params);
+};

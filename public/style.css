@@ -11,6 +11,13 @@ body {
     border: 1px dotted black;
     display: inherit;
 }
+
+.thanks {
+    display: grid;
+    justify-content: center;
+    justify-items: center;
+}
+
 .form {
     display: grid;
     justify-content: center;
@@ -43,4 +50,13 @@ button {
     height: 75%;
     font-size: 150%;
     border-radius: 10px;
+}
+
+.canvs {
+    border: 1px dashed grey;
+}
+
+.signers {
+    display: inline;
+    padding-right: 20px;
 }

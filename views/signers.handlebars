@@ -1,6 +1,15 @@
 <h1>All the signatures of our Database:</h1>
 <ul>
     {{#signatures}}
-    <li>{{.}}</li>
+        <li>
+            {{#if url}}
+                <a class="signers" href={{url}}>{{first}} {{last}}</a>
+                <p class="signers"> {{age}}</p><a
+                    class="signers"
+                    href="/signatures/{{city}}"
+                >{{city}}</a>{{else}}
+                <p class="signers">{{first}} {{last}} {{age}}</p>
+                <a class="signers" href="/signatures/{{city}}">{{city}}</a>
+            {{/if}}</li>
     {{/signatures}}
 </ul>
