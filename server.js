@@ -56,7 +56,10 @@ app.get("/signatures", (req, res) => {
                 });
             })
             .catch((err) =>
-                console.log("Sorry, I couldnt get signatures ", err)
+                console.log(
+                    "Sorry, I couldnt get signatures in /signatures ",
+                    err
+                )
             );
     } else {
         res.redirect("/petition");
@@ -66,7 +69,7 @@ app.get("/signatures", (req, res) => {
 app.post("/petition", (req, res) => {
     const data = req.body;
 
-    db.addSignature(data.signature)
+    db.addSignature(req.session.userId, data.signature)
         .then((row) => {
             // console.log("signature added", row.rows[0].id);
             req.session.canvas = row.rows[0].id;
@@ -80,27 +83,20 @@ app.post("/petition", (req, res) => {
 });
 
 app.get("/thanks", (req, res) => {
-    // const { signatureId } = req.session.signatureId;
-    //do query to get signature using signatureId
-    //pass signature back to client to render onscreen
-
-    if (req.session.auth === true) {
-        db.getSignature()
+    // console.log(req.session.userId);
+    if (req.session.userId) {
+        db.getSignature(req.session.userId)
             .then(({ rows }) => {
-                let arrResult = [];
-                // console.log("results.rows", rows);
+                arrResult = [];
+                console.log(rows)
                 arrResult.push(rows.length);
-                arrResult;
-                for (let y = 0; y < rows.length; y++) {
-                    if (rows[y].id === req.session.canvas) {
-                        arrResult.push(rows[y].signature);
-                        arrResult.push(rows[y].first);
-                    }
-                }
-
+                arrResult.push(rows[0].signature);
+                arrResult.push(rows[0].first);
                 return arrResult;
             })
+            // db.dataFromId(req.session.userId)
             .then((arrResult) => {
+                // console.log("RESULT!:",result.rows.signature)
                 res.render("thanks", {
                     layout: "main",
                     results: arrResult[0],
@@ -109,7 +105,7 @@ app.get("/thanks", (req, res) => {
                 });
             })
             .catch((err) =>
-                console.log("Sorry, I couldnt get signatures ", err)
+                console.log("Sorry, I couldnt get signatures in /thanks ", err)
             );
     } else {
         res.redirect("/petition");
@@ -135,7 +131,7 @@ app.post("/register", (req, res) => {
                     // console.log("user added", row.rows[0].id);
                     req.session.userId = row.rows[0].id;
                     // req.session.auth = true;
-                    res.redirect("/petition");
+                    res.redirect("/profile");
                 })
                 .catch((err) => {
                     console.log("Error ading User: ", err);
@@ -159,7 +155,7 @@ app.post("/login", (req, res) => {
     //this is where I want to use the compare.
     db.getUser(data.email)
         .then(({ rows }) => {
-            console.log(rows);
+            // console.log(rows);
             return rows[0];
         })
         .then((results) =>
@@ -186,6 +182,9 @@ app.post("/login", (req, res) => {
         });
 });
 
+app.get("/profile",(req,res)=>{
+    res.render("profile")
+})
 /////////////////////////
 
 app.listen(PORT, () => {

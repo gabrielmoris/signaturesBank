@@ -13,16 +13,18 @@ const db = spicedPg(
 
 console.log(`[db] connecting to: ${database}`);
 
-module.exports.getSignature = () => {
-    const q = "SELECT * FROM signatures";
-    return db.query(q);
+module.exports.getSignature = (id) => {
+    const q =
+        "SELECT * FROM users JOIN signatures ON users.id = signatures.user_id WHERE users.id = $1";
+    const params = [id];
+    return db.query(q, params);
 };
 
-module.exports.addSignature = (signerSignature) => {
+module.exports.addSignature = (cookie, signerSignature) => {
     // console.log(signerName, signerSurname, signerSignature);
-    const q = `INSERT INTO signatures (signature) Values($1)
+    const q = `INSERT INTO signatures (user_id, signature) Values($1,$2)
     RETURNING user_id`; //still need to add userId
-    const params = [signerSignature];
+    const params = [cookie, signerSignature];
     return db.query(q, params);
 };
 
@@ -50,8 +52,20 @@ module.exports.didSign = (id) => {
     return db.query(q, params);
 };
 
-// module.exports.requestData = ()=>{
-//     const q = "HOLA"
-// }
-//REMEMBER EVERY DAY!
-//sudo service postgresql start
+module.exports.dataFromId = (id) => {
+    const q = `SELECT users.id AS user_id, users.first AS first, users.last AS last, 
+        users.email AS email, signatures.signature AS signature, 
+        user_profiles.age AS age, user_profiles.url AS url, user_profiles.city AS city
+        FROM users 
+        LEFT JOIN signatures ON users.id = signatures.user_id 
+        LEFT JOIN user_profiles ON users.id = user_profiles.user_id 
+        WHERE users.id = $1`;
+    const params = [id];
+    return db.query(q, params);
+};
+
+module.exports.addUserProfile = (id) => {
+    const q = ``
+    const params = [id];
+    return db.query(q, params);
+}
