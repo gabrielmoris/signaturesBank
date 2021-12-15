@@ -27,7 +27,8 @@ app.use(
     })
 );
 app.get("/petition", (req, res) => {
-    if (req.session.auth === true) {
+    // console.log("i am in petition:", req.session);
+    if (req.session.auth) {
         res.redirect("/thanks");
     } else {
         res.render("petition", {
@@ -59,7 +60,6 @@ app.get("/signatures", (req, res) => {
 
 app.post("/petition", (req, res) => {
     const data = req.body;
-
     db.addSignature(req.session.userId, data.signature)
         .then((row) => {
             // console.log("signature added", row.rows[0].id);
@@ -74,16 +74,25 @@ app.post("/petition", (req, res) => {
 });
 
 app.get("/thanks", (req, res) => {
-  ///SI ENTRO DESDE LOGIN DOESNT WORK
+    ///SI ENTRO DESDE LOGIN DOESNT WORK
+    arrResult = [];
     if (req.session.userId) {
         db.getSignature(req.session.userId)
             .then(({ rows }) => {
-                arrResult = [];
                 // console.log(rows);
-                //SOMEHOW NOW THE ARRAY WILL HAVE ONLY THE LENGTH OF 1... CHECK THIS LATER
-                arrResult.push(rows.length);
+                // arrResult.push(rows.length);
                 arrResult.push(rows[0].signature);
                 arrResult.push(rows[0].first);
+                // return arrResult;
+                return db.getNumberSignatures();
+            })
+            .then((number) => {
+                // console.log(
+                //     "i am going to ush this in arrResult",
+                //     number.rows[0].count
+                // );
+                arrResult.push(number.rows[0].count);
+                // console.log(arrResult);
                 return arrResult;
             })
             // db.dataFromId(req.session.userId)
@@ -91,9 +100,9 @@ app.get("/thanks", (req, res) => {
                 // console.log("RESULT!:",result.rows.signature)
                 res.render("thanks", {
                     layout: "main",
-                    results: arrResult[0],
-                    canvas: arrResult[1],
-                    firstname: arrResult[2],
+                    results: arrResult[2],
+                    canvas: arrResult[0],
+                    firstname: arrResult[1],
                 });
             })
             .catch((err) =>
@@ -159,12 +168,13 @@ app.post("/login", (req, res) => {
                     // );
                     req.session.userId = results.id;
                     db.didSign(results.id).then((didSignResults) => {
-                        // console.log(didSignResults.rows);
+                        // console.log("didsignrows", didSignResults.rows);
                         if (didSignResults.rows.length === 0) {
                             res.redirect("/petition");
                         } else {
                             //NO ESTOY SEGURO DE ESTO
-                            // req.session.auth === true;
+                            // console.log("user loged", req.session);
+                            req.session.auth === true;
                             res.redirect("/thanks");
                         }
                     });
@@ -172,7 +182,7 @@ app.post("/login", (req, res) => {
             })
         )
         .catch((err) => {
-            console.log("Error ading User: ", err);
+            console.log("Error adding User: ", err);
             res.render("login", { error: true });
         });
 });
@@ -184,7 +194,12 @@ app.get("/profile", (req, res) => {
 app.post("/profile", (req, res) => {
     const data = req.body;
     // console.log(data);
-    const urlUser = `http\://${data.urlpage}`;
+    let urlUser;
+    if (data.urlpage.startsWith("http")) {
+        urlUser = data.urlpage;
+    } else {
+        urlUser = `https\://${data.urlpage}`;
+    }
     db.addUserProfile(data.age, urlUser, data.city, req.session.userId)
         .then(() => res.redirect("/petition"))
         .catch((err) => {
@@ -211,7 +226,23 @@ app.get("/signatures/:city", (req, res) => {
         );
 });
 /////////////////////////
+app.post("/delete-signature", (rew, res) => {
+    db.deleteUser().then(() => res.redirect("/register"));
+});
 
+app.post(`/profile/edit`, (req, res) => {
+    if (!req.body.password) {
+        //2 diferent db queries, there is not update join in sql
+        //user doesnt want to change the password
+        //here to update all but not password
+    } else {
+        //user changed the password, we modify it
+        //hash this and update the table
+        //here to update only the passsword
+        req.body.password;
+    }
+});
+/////////////////////////
 app.listen(PORT, () => {
     console.log(
         `Petition server is listenning 👂)))\n\nHERE------>   http://localhost:${PORT}`

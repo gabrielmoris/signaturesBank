@@ -30,6 +30,10 @@ module.exports.getAllSignatures = () => {
     return db.query(q);
 };
 
+module.exports.getNumberSignatures = () => {
+    const q = `SELECT COUNT(*) FROM signatures`;
+    return db.query(q);
+};
 module.exports.addSignature = (cookie, signerSignature) => {
     // console.log(signerName, signerSurname, signerSignature);
     const q = `INSERT INTO signatures (user_id, signature) Values($1,$2)
@@ -76,7 +80,7 @@ module.exports.dataFromId = (id) => {
 
 module.exports.addUserProfile = (signerAge, signerUrl, signerCity, userId) => {
     const q = `INSERT INTO user_profiles (age, url, city, user_id) Values($1,$2,LOWER($3),$4)`;
-    const params = [signerAge, signerUrl, signerCity, userId];
+    const params = [signerAge || null, signerUrl, signerCity, userId];
     return db.query(q, params);
 };
 
@@ -89,5 +93,11 @@ module.exports.getUserByCity = (city) => {
         LEFT JOIN user_profiles ON users.id = user_profiles.user_id 
         WHERE user_profiles.city = $1`;
     const params = [city];
+    return db.query(q, params);
+};
+
+module.exports.deleteUser = (id) => {
+    const q = `DELETE FROM users WHERE id = $1`;
+    const params = [id];
     return db.query(q, params);
 };

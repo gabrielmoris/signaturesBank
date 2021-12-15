@@ -1,6 +1,6 @@
 <h1>You can complete you profile with aditional data.</h1>
 {{#if error}}
-    <h2 class="error">Something wrnt wrong.</h2>
+    <h2 class="error">Something went wrong adding your profile data.</h2>
 {{/if}}
 <form method="POST" class="form">
     <label for="age">Age:</label>
@@ -12,13 +12,13 @@
         autocomplete="off"
     />
     <label for="urlpage">Webpage or Social Media:</label>
-    <input type="urlpage" name="urlpage" placeholder="http://" autocomplete="off" />
-    <label for="city">City:</label>
     <input
-        type="text"
-        name="city"
-        placeholder="Your City"
+        type="urlpage"
+        name="urlpage"
+        placeholder="http://"
         autocomplete="off"
     />
+    <label for="city">City:</label>
+    <input type="text" name="city" placeholder="Your City" autocomplete="off" />
     <button type="submit">CONTINUE</button>
 </form>
