@@ -5,40 +5,40 @@
         class="first-name"
         type="text"
         name="first"
-        placeholder="first name"
+        value="{{data.first}}"
         autocomplete="off"
     />
     <label for="last">Your Surname:</label>
-    <input type="text" name="last" placeholder="Surname" autocomplete="off" />
+    <input type="text" name="last" value="{{data.last}}" autocomplete="off" />
     <input
         type="email"
         name="email"
-        placeholder="email@email.com"
+        value="{{data.email}}"
         autocomplete="off"
     />
     <label for="password">Password:</label>
     <input
         type="password"
         name="password"
-        placeholder="*******"
+        placeholder="******"
         autocomplete="off"
     />
-     <label for="age">Age:</label>
+    <label for="age">Age:</label>
     <input
         class="age"
         type="number"
         name="age"
-        placeholder=""
+        value="{{data.age}}"
         autocomplete="off"
     />
     <label for="urlpage">Webpage or Social Media:</label>
     <input
         type="urlpage"
         name="urlpage"
-        placeholder="http://"
+        value="{{data.url}}"
         autocomplete="off"
     />
     <label for="city">City:</label>
-    <input type="text" name="city" placeholder="Your City" autocomplete="off" />
-    <button type="submit">SUBMIT</button>
+    <input type="text" name="city" value="{{data.city}}" autocomplete="off" />
+    <button type="submit">EDIT</button>
 </form>

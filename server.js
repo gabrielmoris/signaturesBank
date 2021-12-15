@@ -226,9 +226,15 @@ app.get("/signatures/:city", (req, res) => {
         );
 });
 /////////////////////////
-app.post("/delete-user", (req, res) => {
-    db.deleteUser(req.session.userId).then(() => res.redirect("/register"));
-});
+// app.post("/delete-user", (req, res) => {
+//     db.deleteSignature(req.session.userId)
+//         .then(() => db.deleteUser(req.session.userId))
+//         .then(() => {
+//             req.session.auth = false;
+//             req.session.userId = null;
+//             res.redirect("/register");
+//         });
+// });
 app.post("/delete-signature", (req, res) => {
     db.deleteSignature(req.session.userId).then(() => {
         req.session.auth = false;
@@ -238,9 +244,22 @@ app.post("/delete-signature", (req, res) => {
 
 app.post(`/profile/edit`, (req, res) => {
     if (!req.body.password) {
+        const data = req.body;
+        // console.log(data);
+
         //2 diferent db queries, there is not update join in sql
         //user doesnt want to change the password
         //here to update all but not password
+        db.editUser(data.first, data.last, data.email, req.session.userId)
+            .then(() =>
+                db.editUserData(
+                    data.age,
+                    data.urlpage,
+                    data.city,
+                    req.session.userId
+                )
+            )
+            .then(() => res.redirect("/petition"));
     } else {
         //user changed the password, we modify it
         //hash this and update the table
@@ -250,7 +269,14 @@ app.post(`/profile/edit`, (req, res) => {
 });
 
 app.get(`/profile/edit`, (req, res) => {
-    res.render("edit");
+    db.dataFromId(req.session.userId).then(({ rows }) => {
+        // console.log(rows[0]);
+        row = rows[0];
+        res.render("edit", {
+            layout: "main",
+            data: row,
+        });
+    });
 });
 
 /////////////////////////

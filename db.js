@@ -98,7 +98,7 @@ module.exports.getUserByCity = (city) => {
 };
 //implement later
 // module.exports.deleteUser = (id) => {
-//     const q = `DELETE FROM signatures WHERE user_id = $1; DELETE FROM users WHERE id = $1`;
+//     const q = `DELETE FROM users WHERE id = $1`;
 //     const params = [id];
 //     return db.query(q, params);
 // };
@@ -106,5 +106,27 @@ module.exports.getUserByCity = (city) => {
 module.exports.deleteSignature = (user_id) => {
     const q = `DELETE FROM signatures WHERE user_id = $1`;
     const params = [user_id];
+    return db.query(q, params);
+};
+
+module.exports.editUser = (first, last, email, cookie) => {
+    const q = `UPDATE users SET first =$1, last=$2, email=$3 WHERE users.id = $4`;
+    const params = [first, last, email, cookie];
+    return db.query(q, params);
+};
+
+module.exports.editUserData = (age, url, city, cookie) => {
+    const q = `INSERT INTO user_profiles(age,url,city, user_id)
+    VALUES($1,$2,$3,$4)
+    ON CONFLICT (user_id)
+    DO UPDATE SET age =$1, url = $2, city= $3`;
+    const params = [age, url, city, cookie];
+    return db.query(q, params);
+};
+
+module.exports.edirPassword = (pass, cookie) => {
+    const q = `INSERT INTO users(password)
+    VALUES($1) WHERE user.id = $4`;
+    const params = [pass, cookie];
     return db.query(q, params);
 };
