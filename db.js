@@ -8,7 +8,8 @@ const password = "onion";
 
 //communication with the database
 const db = spicedPg(
-    `postgres:${username}:${password}@localhost:5432/${database}`
+    process.env.DATABASE_URL ||
+        `postgres:${username}:${password}@localhost:5432/${database}`
 );
 
 console.log(`[db] connecting to: ${database}`);
@@ -95,9 +96,15 @@ module.exports.getUserByCity = (city) => {
     const params = [city];
     return db.query(q, params);
 };
+//implement later
+// module.exports.deleteUser = (id) => {
+//     const q = `DELETE FROM signatures WHERE user_id = $1; DELETE FROM users WHERE id = $1`;
+//     const params = [id];
+//     return db.query(q, params);
+// };
 
-module.exports.deleteUser = (id) => {
-    const q = `DELETE FROM users WHERE id = $1`;
-    const params = [id];
+module.exports.deleteSignature = (user_id) => {
+    const q = `DELETE FROM signatures WHERE user_id = $1`;
+    const params = [user_id];
     return db.query(q, params);
 };

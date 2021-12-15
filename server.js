@@ -1,4 +1,4 @@
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 const express = require("express");
 const app = express();
 const db = require("./db");
@@ -226,8 +226,14 @@ app.get("/signatures/:city", (req, res) => {
         );
 });
 /////////////////////////
-app.post("/delete-signature", (rew, res) => {
-    db.deleteUser().then(() => res.redirect("/register"));
+app.post("/delete-user", (req, res) => {
+    db.deleteUser(req.session.userId).then(() => res.redirect("/register"));
+});
+app.post("/delete-signature", (req, res) => {
+    db.deleteSignature(req.session.userId).then(() => {
+        req.session.auth = false;
+        res.redirect("/petition");
+    });
 });
 
 app.post(`/profile/edit`, (req, res) => {
@@ -242,9 +248,12 @@ app.post(`/profile/edit`, (req, res) => {
         req.body.password;
     }
 });
+
+app.get(`/profile/edit`, (req, res) => {
+    res.render("edit");
+});
+
 /////////////////////////
 app.listen(PORT, () => {
-    console.log(
-        `Petition server is listenning 👂)))\n\nHERE------>   http://localhost:${PORT}`
-    );
+    console.log(`Petition server is listenning 👂)))`);
 });
