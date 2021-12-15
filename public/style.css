@@ -1,15 +1,22 @@
 body {
-    background-color: LightBlue;
+    background: url(desktop.png);
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
     display: grid;
     grid-template-columns: 75%;
-    grid-template-rows: 25% 50%;
+    grid-template-rows: 30px 25% 50%;
     justify-content: center;
     justify-items: center;
+    font-family: "Inria Sans", sans-serif;
+    color: #d8d8e5;
 }
 
 #canv {
     border: 1px dotted black;
     display: inherit;
+    background-color: rgba(216, 216, 229, 0.301);
 }
 
 .thanks {
@@ -30,13 +37,7 @@ body {
     margin-top: 5%;
     margin-left: 10%;
 }
-/* .first-name {
-    margin-bottom: 10px;
-}
 
-.last-name {
-    margin-bottom: 50px;
-} */
 input {
     margin-bottom: 10px;
     width: 70%;
@@ -49,9 +50,12 @@ button {
     width: 80%;
     height: 75%;
     font-size: 150%;
-    border-radius: 10px;
+    border-radius: 7px;
 }
-
+button:hover {
+    width: 78%;
+    height: 73%;
+}
 .canvs {
     border: 1px dashed grey;
 }
@@ -59,4 +63,53 @@ button {
 .signers {
     display: inline;
     padding-right: 20px;
+}
+
+/* Navbar */
+#menu2 {
+    /* position: fixed; */
+    /* height: 100%;
+    width: 20%; */
+    /* right: 0; */
+    display: flex;
+    background-color: #2148bf;
+    border-radius: 7px;
+}
+
+.menu-link {
+    padding: 10px 20px 10px 20px;
+    font-size: 25px;
+    color: #192340;
+    font-weight: 600;
+}
+
+.menu-link:hover {
+    background-color: #192340;
+    color: #2148bf;
+}
+
+a {
+    text-decoration: none;
+    color: #d8d8e5;
+}
+
+a:active {
+    color: antiquewhite;
+}
+.loginbutton {
+    width: 70%;
+    height: 60%;
+    font-size: 150%;
+    border-radius: 7px;
+}
+
+.signbutton {
+    width: 50%;
+    height: 40%;
+    font-size: 150%;
+    border-radius: 7px;
+}
+.signbutton:hover {
+    width: 48%;
+    height: 38%;
 }

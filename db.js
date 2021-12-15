@@ -124,9 +124,10 @@ module.exports.editUserData = (age, url, city, cookie) => {
     return db.query(q, params);
 };
 
-module.exports.edirPassword = (pass, cookie) => {
-    const q = `INSERT INTO users(password)
-    VALUES($1) WHERE user.id = $4`;
+module.exports.editPassword = (pass, cookie) => {
+    const q = `UPDATE users
+    SET password =$1
+    WHERE users.id = $2`;
     const params = [pass, cookie];
     return db.query(q, params);
 };

@@ -1,4 +1,6 @@
-<h1>I am LOGIN</h1>
+{{>navbar}}
+<h1>LOGIN to add or edit your signature.</h1>
+
 {{#if error}}
     <h2 class="error">Error loging. Email or password are incorrect.</h2>
 {{/if}}
@@ -15,5 +17,5 @@
         placeholder="*******"
         autocomplete="off"
     />
-    <button type="submit">LOGIN</button>
+    <button class="loginbutton" type="submit">LOGIN</button>
 </form>

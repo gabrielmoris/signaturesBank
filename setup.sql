@@ -26,3 +26,5 @@ CREATE TABLE user_profiles(
     city VARCHAR(255),
     user_id INTEGER NOT NULL UNIQUE REFERENCES users(id)
 );
+
+-- sudo service postgresql start
