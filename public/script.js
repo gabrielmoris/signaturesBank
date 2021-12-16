@@ -71,8 +71,8 @@
                 context,
                 xpos,
                 ypos,
-                e.touches[0].screenX,
-                e.touches[0].screenY
+                e.touches[0].screenX - canvPosX,
+                e.touches[0].screenY - canvPosY
             );
             xpos = 0;
             ypos = 0;
