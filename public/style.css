@@ -41,15 +41,16 @@ body {
 input {
     margin-bottom: 10px;
     width: 70%;
-    height: 40%;
-    font-size: 200%;
-    border-radius: 10px;
+    height: 60%;
+    font-size: 170%;
+    border-radius: 7px;
     text-align: center;
+    background-color: #d8d8e5;
 }
 button {
     width: 80%;
     height: 75%;
-    font-size: 150%;
+    font-size: 140%;
     border-radius: 7px;
 }
 button:hover {
@@ -57,7 +58,7 @@ button:hover {
     height: 73%;
 }
 .canvs {
-    border: 1px dashed grey;
+    border: 1px dashed #d8d8e5;
 }
 
 .signers {
@@ -91,10 +92,11 @@ button:hover {
 a {
     text-decoration: none;
     color: #d8d8e5;
+    font-weight: 900;
 }
 
-a:active {
-    color: antiquewhite;
+a:hover {
+    color:#2148bf ;
 }
 .loginbutton {
     width: 70%;

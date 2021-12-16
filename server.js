@@ -13,7 +13,7 @@ app.use((req, res, next) => {
 // const secretcookie = require("secrets.json");
 
 const path = require("path");
-
+//MIDDLEWARE_______________________________________________________________________
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
 app.use(express.static(path.join(__dirname, "public")));
@@ -26,6 +26,14 @@ app.use(
         sameSite: true,
     })
 );
+//TEST COOKIES_______________________________
+// app.use((req, res, next) => {
+//     console.log(req.url);
+//     console.log("cookie", req.session);
+//     next();
+// });
+//PETITION________________________________________________________________________
+
 app.get("/petition", (req, res) => {
     if (req.session.auth) {
         res.redirect("/thanks");
@@ -36,8 +44,24 @@ app.get("/petition", (req, res) => {
     }
 });
 
+app.post("/petition", (req, res) => {
+    const data = req.body;
+    db.addSignature(req.session.userId, data.signature)
+        .then((row) => {
+            req.session.canvas = row.rows[0].id;
+            req.session.auth = true;
+            res.redirect("/thanks");
+        })
+        .catch((err) => {
+            console.log("signature not added: ", err);
+            res.render("petition", { error: true });
+        });
+});
+//________________________________________________________________________________
+
+//SIGNATURES______________________________________________________________________
 app.get("/signatures", (req, res) => {
-    if (req.session.auth === true) {
+    if (req.session.auth) {
         db.getAllSignatures()
             .then(({ rows }) => {
                 res.render("signers", {
@@ -56,20 +80,26 @@ app.get("/signatures", (req, res) => {
     }
 });
 
-app.post("/petition", (req, res) => {
-    const data = req.body;
-    db.addSignature(req.session.userId, data.signature)
-        .then((row) => {
-            req.session.canvas = row.rows[0].id;
-            req.session.auth = true;
-            res.redirect("/thanks");
+app.get("/signatures/:city", (req, res) => {
+    const requestedCity = req.params.city;
+    db.getUserByCity(requestedCity)
+        .then(({ rows }) => {
+            // console.log(rows.email)
+            res.render("signers", {
+                layout: "main",
+                signatures: rows,
+            });
         })
-        .catch((err) => {
-            console.log("signature not added: ", err);
-            res.render("petition", { error: true });
-        });
+        .catch((err) =>
+            console.log(
+                "Sorry, I couldnt get signatures in /signatures/city ",
+                err
+            )
+        );
 });
+//________________________________________________________________________________
 
+//THANKS__________________________________________________________________________
 app.get("/thanks", (req, res) => {
     arrResult = [];
     if (req.session.userId) {
@@ -101,12 +131,14 @@ app.get("/thanks", (req, res) => {
     }
 });
 
-app.get("/", (req, res) => {
-    res.redirect("/register");
-});
+//REGISTER________________________________________________________________________
 
 app.get("/register", (req, res) => {
-    res.render("register", { layout: "main" });
+    if (req.session.userId) {
+        res.redirect("/petition");
+    } else {
+        res.render("register", { layout: "main" });
+    }
 });
 
 app.post("/register", (req, res) => {
@@ -132,7 +164,9 @@ app.post("/register", (req, res) => {
             res.render("register", { error: true });
         });
 });
+//________________________________________________________________________________
 
+//LOGIN___________________________________________________________________________
 app.get("/login", (req, res) => {
     res.render("login", { layout: "main" });
 });
@@ -148,15 +182,16 @@ app.post("/login", (req, res) => {
                 if (match === true) {
                     req.session.userId = results.id;
                     db.didSign(results.id).then((didSignResults) => {
-                        // console.log("didsignrows", didSignResults.rows);
                         if (didSignResults.rows.length === 0) {
-                            req.session.auth === false; /////ADDED15/12/2021
+                            req.session.auth = false; /////ADDED15/12/2021
                             res.redirect("/petition");
                         } else {
-                            req.session.auth === true;
+                            req.session.auth = true;
                             res.redirect("/thanks");
                         }
                     });
+                } else {
+                    res.render("login", { error: true });
                 }
             })
         )
@@ -165,7 +200,9 @@ app.post("/login", (req, res) => {
             res.render("login", { error: true });
         });
 });
+//________________________________________________________________________________
 
+//PROFILE_________________________________________________________________________
 app.get("/profile", (req, res) => {
     res.render("profile");
 });
@@ -173,10 +210,12 @@ app.get("/profile", (req, res) => {
 app.post("/profile", (req, res) => {
     const data = req.body;
     let urlUser;
-    if (data.urlpage.startsWith("http")) {
-        urlUser = data.urlpage;
-    } else {
-        urlUser = `https\://${data.urlpage}`;
+    if (data.urlpage != "") {
+        if (data.urlpage.startsWith("http")) {
+            urlUser = data.urlpage;
+        } else {
+            urlUser = `https\://${data.urlpage}`;
+        }
     }
     db.addUserProfile(data.age, urlUser, data.city, req.session.userId)
         .then(() => res.redirect("/petition"))
@@ -186,37 +225,13 @@ app.post("/profile", (req, res) => {
         });
 });
 
-app.get("/signatures/:city", (req, res) => {
-    const requestedCity = req.params.city;
-    db.getUserByCity(requestedCity)
-        .then(({ rows }) => {
-            // console.log(rows.email)
-            res.render("signers", {
-                layout: "main",
-                signatures: rows,
-            });
-        })
-        .catch((err) =>
-            console.log(
-                "Sorry, I couldnt get signatures in /signatures/city ",
-                err
-            )
-        );
-});
-/////////////////////////
-// app.post("/delete-user", (req, res) => {
-//     db.deleteSignature(req.session.userId)
-//         .then(() => db.deleteUser(req.session.userId))
-//         .then(() => {
-//             req.session.auth = false;
-//             req.session.userId = null;
-//             res.redirect("/register");
-//         });
-// });
-app.post("/delete-signature", (req, res) => {
-    db.deleteSignature(req.session.userId).then(() => {
-        req.session.auth = false;
-        res.redirect("/petition");
+app.get(`/profile/edit`, (req, res) => {
+    db.dataFromId(req.session.userId).then(({ rows }) => {
+        row = rows[0];
+        res.render("edit", {
+            layout: "main",
+            data: row,
+        });
     });
 });
 
@@ -257,17 +272,33 @@ app.post(`/profile/edit`, (req, res) => {
         });
     }
 });
+//________________________________________________________________________________
 
-app.get(`/profile/edit`, (req, res) => {
-    db.dataFromId(req.session.userId).then(({ rows }) => {
-        row = rows[0];
-        res.render("edit", {
-            layout: "main",
-            data: row,
-        });
+/////////////////////////
+// app.post("/delete-user", (req, res) => {
+//     db.deleteSignature(req.session.userId)
+//         .then(() => db.deleteUser(req.session.userId))
+//         .then(() => {
+//             req.session.auth = false;
+//             req.session.userId = null;
+//             res.redirect("/register");
+//         });
+// });
+app.post("/delete-signature", (req, res) => {
+    db.deleteSignature(req.session.userId).then(() => {
+        req.session.auth = false;
+        res.redirect("/petition");
     });
 });
 
+app.get(`/logout`, (req, res) => {
+    req.session = null;
+    res.redirect("/register");
+});
+
+app.get("/", (req, res) => {
+    res.redirect("/register");
+});
 /////////////////////////
 app.listen(PORT, () => {
     console.log(`Petition server is listenning 👂)))`);
