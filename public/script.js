@@ -4,6 +4,8 @@
     let context = canv.getContext("2d");
     let dataURL;
     let isSigning = false;
+    const canvPosX = canv.offsetLeft;
+    const canvPosY = canv.offsetTop + canv.offsetHeight / 2;
     let xpos = 0;
     let ypos = 0;
 
@@ -42,4 +44,41 @@
         }
     });
     //Touchscreen-----------------------------------------------------REVISE
+    canv.addEventListener("touchstart", (e) => {
+        // console.log(e);
+        xpos = e.touches[0].screenX - canvPosX;
+        ypos = e.touches[0].screenY - canvPosY;
+        isSigning = true;
+    });
+
+    canv.addEventListener("touchmove", (e) => {
+        if (isSigning === true) {
+            signing(
+                context,
+                xpos,
+                ypos,
+                e.touches[0].screenX - canvPosX,
+                e.touches[0].screenY - canvPosY
+            );
+            xpos = e.touches[0].screenX - canvPosX;
+            ypos = e.touches[0].screenY - canvPosY;
+        }
+    });
+
+    window.addEventListener("touchend", (e) => {
+        if (isSigning === true) {
+            signing(
+                context,
+                xpos,
+                ypos,
+                e.touches[0].screenX,
+                e.touches[0].screenY
+            );
+            xpos = 0;
+            ypos = 0;
+            isSigning = false;
+            dataURL = canv.toDataURL();
+            signature.value = dataURL;
+        }
+    });
 })();

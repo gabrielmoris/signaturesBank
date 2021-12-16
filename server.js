@@ -105,8 +105,13 @@ app.get("/thanks", (req, res) => {
     if (req.session.userId) {
         db.getSignature(req.session.userId)
             .then(({ rows }) => {
-                arrResult.push(rows[0].signature);
-                arrResult.push(rows[0].first);
+                console.log(rows);
+                if (rows.length) {
+                    arrResult.push(rows[0].signature);
+                    arrResult.push(rows[0].first);
+                } else {
+                    return res.redirect("/petition");
+                }
                 // return arrResult;
                 return db.getNumberSignatures();
             })
@@ -127,7 +132,7 @@ app.get("/thanks", (req, res) => {
                 console.log("Sorry, I couldnt get signatures in /thanks ", err)
             );
     } else {
-        res.redirect("/petition");
+        return res.redirect("/petition");
     }
 });
 
@@ -300,6 +305,10 @@ app.get("/", (req, res) => {
     res.redirect("/register");
 });
 /////////////////////////
-app.listen(PORT, () => {
-    console.log(`Petition server is listenning 👂)))`);
-});
+if (require.main == module) {
+    app.listen(PORT, () => {
+        console.log(`Petition server is listenning 👂)))`);
+    });
+}
+
+module.exports.app = app;
