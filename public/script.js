@@ -5,7 +5,7 @@
     let dataURL;
     let isSigning = false;
     const canvPosX = canv.offsetLeft - canv.offsetWidth / 10;
-    const canvPosY = canv.offsetTop + canv.offsetHeight / 5;
+    const canvPosY = canv.offsetTop + canv.offsetHeight;
     let xpos = 0;
     let ypos = 0;
 
