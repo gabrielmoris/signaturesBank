@@ -35,12 +35,16 @@ app.use(
 //PETITION________________________________________________________________________
 
 app.get("/petition", (req, res) => {
-    if (req.session.auth) {
-        res.redirect("/thanks");
+    if (req.session.userId) {
+        if (req.session.auth) {
+            res.redirect("/thanks");
+        } else {
+            res.render("petition", {
+                layout: "main",
+            });
+        }
     } else {
-        res.render("petition", {
-            layout: "main",
-        });
+        return res.redirect("/register");
     }
 });
 
@@ -209,7 +213,11 @@ app.post("/login", (req, res) => {
 
 //PROFILE_________________________________________________________________________
 app.get("/profile", (req, res) => {
-    res.render("profile");
+    if (req.session.userId) {
+        res.render("profile");
+    } else {
+        res.redirect("/register");
+    }
 });
 
 app.post("/profile", (req, res) => {
