@@ -48,6 +48,7 @@
     });
     //Touchscreen-----------------------------------------------------REVISE
     canv.addEventListener("touchstart", (e) => {
+        e.preventDefault();
         // console.log(e);
         xpos = e.touches[0].pageX - canvPosX;
         ypos = e.touches[0].pageY - canvPosY;
@@ -55,6 +56,7 @@
     });
 
     canv.addEventListener("touchmove", (e) => {
+        e.preventDefault();
         if (isSigning === true) {
             signing(
                 context,
@@ -69,6 +71,7 @@
     });
 
     window.addEventListener("touchend", (e) => {
+        e.preventDefault();
         if (isSigning === true) {
             // signing(
             //     context,
