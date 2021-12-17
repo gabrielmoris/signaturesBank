@@ -96,7 +96,7 @@ a {
 }
 
 a:hover {
-    color:#2148bf ;
+    color: #2148bf;
 }
 .loginbutton {
     width: 70%;
@@ -114,4 +114,51 @@ a:hover {
 .signbutton:hover {
     width: 48%;
     height: 38%;
+}
+/* PHONE */
+@media screen and (max-width: 800px) {
+    .signbutton {
+        height: auto;
+    }
+    .signbutton:hover {
+        height: auto;
+        background-color: rgba(216, 216, 229, 0.301);
+    }
+    .error {
+        position: absolute;
+        bottom: 0;
+    }
+    button {
+        height: auto;
+    }
+    .menu-link {
+        padding: 0px 5px 0px 5px;
+        font-size: 20px;
+        background-color: #192340;
+        color: #2148bf;
+        font-weight: 600;
+        text-align: center;
+        text-justify: inter-word;
+    }
+    #menu2 {
+        background-color: #192340;
+        border: 1px solid #2148bf;
+        border-radius: 7px;
+    }
+    body {
+        background: url(desktop.png);
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: auto;
+        grid-template-columns: 75%;
+        grid-template-rows: 70px 15% 50%;
+        text-align: center;
+    }
+    #canv {
+        width: 409px;
+    }
+    .canvs {
+        width: 409px;
+    }
 }
