@@ -239,13 +239,17 @@ app.post("/profile", (req, res) => {
 });
 
 app.get(`/profile/edit`, (req, res) => {
-    db.dataFromId(req.session.userId).then(({ rows }) => {
-        row = rows[0];
-        res.render("edit", {
-            layout: "main",
-            data: row,
+    if (req.session.userId) {
+        db.dataFromId(req.session.userId).then(({ rows }) => {
+            row = rows[0];
+            res.render("edit", {
+                layout: "main",
+                data: row,
+            });
         });
-    });
+    } else {
+        res.redirect("/register");
+    }
 });
 
 app.post(`/profile/edit`, (req, res) => {
