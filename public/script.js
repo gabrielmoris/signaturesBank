@@ -4,8 +4,11 @@
     let context = canv.getContext("2d");
     let dataURL;
     let isSigning = false;
-    const canvPosX = canv.offsetLeft - canv.offsetWidth / 10;
-    const canvPosY = canv.offsetTop + canv.offsetHeight / 3;
+    const canvPosX = canv.offsetLeft;
+    const canvPosY = canv.offsetTop;
+    // const canvPosX = canv.offsetLeft - canv.offsetWidth / 10;
+    // const canvPosY = canv.offsetTop + canv.offsetHeight / 3;
+
     let xpos = 0;
     let ypos = 0;
 
@@ -46,8 +49,8 @@
     //Touchscreen-----------------------------------------------------REVISE
     canv.addEventListener("touchstart", (e) => {
         // console.log(e);
-        xpos = e.touches[0].screenX - canvPosX;
-        ypos = e.touches[0].screenY - canvPosY;
+        xpos = e.touches[0].pageX - canvPosX;
+        ypos = e.touches[0].pageY - canvPosY;
         isSigning = true;
     });
 
@@ -57,11 +60,11 @@
                 context,
                 xpos,
                 ypos,
-                e.touches[0].screenX - canvPosX,
-                e.touches[0].screenY - canvPosY
+                e.touches[0].pageX - canvPosX,
+                e.touches[0].pageY - canvPosY
             );
-            xpos = e.touches[0].screenX - canvPosX;
-            ypos = e.touches[0].screenY - canvPosY;
+            xpos = e.touches[0].pageX - canvPosX;
+            ypos = e.touches[0].pageY - canvPosY;
         }
     });
 
