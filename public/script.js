@@ -70,7 +70,7 @@
         }
     });
 
-    window.addEventListener("touchend", (e) => {
+    canv.addEventListener("touchend", (e) => {
         e.preventDefault();
         if (isSigning === true) {
             // signing(
