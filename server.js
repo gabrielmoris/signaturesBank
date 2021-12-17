@@ -105,7 +105,7 @@ app.get("/thanks", (req, res) => {
     if (req.session.userId) {
         db.getSignature(req.session.userId)
             .then(({ rows }) => {
-                console.log(rows);
+                // console.log(rows);
                 if (rows.length) {
                     arrResult.push(rows[0].signature);
                     arrResult.push(rows[0].first);
@@ -243,11 +243,20 @@ app.get(`/profile/edit`, (req, res) => {
 app.post(`/profile/edit`, (req, res) => {
     if (!req.body.password) {
         const data = req.body;
+        let urlUser;
+        if (data.urlpage != "") {
+            if (data.urlpage.startsWith("http")) {
+                urlUser = data.urlpage;
+            } else {
+                urlUser = `https\://${data.urlpage}`;
+            }
+        }
+        console.log(urlUser);
         db.editUser(data.first, data.last, data.email, req.session.userId)
             .then(() =>
                 db.editUserData(
                     data.age,
-                    data.urlpage,
+                    urlUser,
                     data.city,
                     req.session.userId
                 )
@@ -267,7 +276,7 @@ app.post(`/profile/edit`, (req, res) => {
                     .then(() =>
                         db.editUserData(
                             data.age,
-                            data.urlpage,
+                            urlUser,
                             data.city,
                             req.session.userId
                         )

@@ -67,13 +67,13 @@
 
     window.addEventListener("touchend", (e) => {
         if (isSigning === true) {
-            signing(
-                context,
-                xpos,
-                ypos,
-                e.touches[0].screenX - canvPosX,
-                e.touches[0].screenY - canvPosY
-            );
+            // signing(
+            //     context,
+            //     xpos,
+            //     ypos,
+            //     e.touches[0].screenX - canvPosX,
+            //     e.touches[0].screenY - canvPosY
+            // );
             xpos = 0;
             ypos = 0;
             isSigning = false;
