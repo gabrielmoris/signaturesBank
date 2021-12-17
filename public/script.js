@@ -4,9 +4,8 @@
     let context = canv.getContext("2d");
     let dataURL;
     let isSigning = false;
-    const canvPosX = canv.offsetWidth;
-    // +canv.offsetLeft;
-    const canvPosY = canv.offsetTop + canv.offsetHeight / 3;
+    const canvPosX = canv.offsetWidth + canv.offsetLeft;
+    const canvPosY = canv.offsetTop + canv.offsetHeight / 2;
     let xpos = 0;
     let ypos = 0;
 
