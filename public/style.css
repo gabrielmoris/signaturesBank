@@ -6,7 +6,7 @@ body {
     background-size: cover;
     display: grid;
     grid-template-columns: 75%;
-    grid-template-rows: 30px 25% 50%;
+    grid-template-rows: 30px 10% 50% 15% 15% 5px;
     justify-content: center;
     justify-items: center;
     font-family: "Inria Sans", sans-serif;
@@ -107,7 +107,7 @@ a:hover {
 
 .signbutton {
     width: 50%;
-    height: 40%;
+    height: 50%;
     font-size: 150%;
     border-radius: 7px;
 }
@@ -115,6 +115,14 @@ a:hover {
     width: 48%;
     height: 38%;
 }
+.copyright {
+    font-size: 5px;
+}
+
+.loginform {
+    padding-top: 15%;
+}
+
 /* PHONE */
 @media screen and (max-width: 800px) {
     .signbutton {
@@ -152,7 +160,7 @@ a:hover {
         -o-background-size: cover;
         background-size: auto;
         grid-template-columns: 75%;
-        grid-template-rows: 70px 15% 50%;
+        grid-template-rows: 30px 10% 50% 15% 15% 5px;
         text-align: center;
     }
     #canv {
@@ -160,5 +168,11 @@ a:hover {
     }
     .canvs {
         width: 409px;
+    }
+    .registerform {
+        padding-top: 40px;
+    }
+    .formprofile {
+        padding-top: 40px;
     }
 }

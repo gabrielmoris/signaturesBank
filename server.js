@@ -177,7 +177,11 @@ app.post("/register", (req, res) => {
 
 //LOGIN___________________________________________________________________________
 app.get("/login", (req, res) => {
-    res.render("login", { layout: "main" });
+    if (req.session.userId) {
+        res.redirect("/petition");
+    } else {
+        res.render("login", { layout: "main" });
+    }
 });
 app.post("/login", (req, res) => {
     const data = req.body;
@@ -323,7 +327,9 @@ app.get(`/logout`, (req, res) => {
 });
 
 app.get("/", (req, res) => {
-    res.redirect("/register");
+    res.render("home", {
+        layout: "main",
+    });
 });
 /////////////////////////
 if (require.main == module) {
