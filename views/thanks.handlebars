@@ -7,11 +7,15 @@
         signatures in the signatures bank!</h2>
     <img src="{{canvas}}" alt="canvas" class="canvs" />
 </div>
+<div>
 <h2>Take a look at the rest of
     <a class="menu-link" href="/signatures">signers</a></h2>
     {{!-- implement later, maybe first I delete signature and .then(())idelete user --}}
 {{!-- <form action="/delete-user" method="POST">
     <button>DELETE USER</button></form> --}}
-    <form action="/delete-signature" method="POST">
-    <button>DELETE SIGNATURE</button></form>
+    <h2>You can <a class="menu-link" href="{{canvas}}" download>download</a> yor signature</h2>
+    <form action="/delete-signature" method="POST" class="formdelete">
+    <button class="signbutton">DELETE</button></form>
+    </div>
+    <div></div>
     

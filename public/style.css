@@ -53,17 +53,44 @@ button {
     font-size: 140%;
     border-radius: 7px;
 }
-button:hover {
-    width: 78%;
-    height: 73%;
-}
+
 .canvs {
     border: 1px dashed #d8d8e5;
+    background-color: rgba(216, 216, 229, 0.301);
 }
 
 .signers {
     display: inline;
     padding-right: 20px;
+}
+
+.loginbutton {
+    width: 70%;
+    height: 60%;
+    font-size: 150%;
+    border-radius: 7px;
+}
+
+.signbutton {
+    width: 50%;
+    height: 100%;
+    font-size: 150%;
+    border-radius: 7px;
+}
+
+.copyright {
+    font-size: 5px;
+}
+
+.loginform {
+    padding-top: 15%;
+}
+
+.autographtext {
+    padding-top: 100px;
+}
+.autographtitle {
+    padding-top: 50px;
 }
 
 /* Navbar */
@@ -98,43 +125,29 @@ a {
 a:hover {
     color: #2148bf;
 }
-.loginbutton {
-    width: 70%;
-    height: 60%;
-    font-size: 150%;
-    border-radius: 7px;
+.formdelete {
+    display: grid;
+    align-items: center;
+    /* justify-content: center; */
+    justify-items: center;
 }
-
-.signbutton {
-    width: 50%;
-    height: 50%;
-    font-size: 150%;
-    border-radius: 7px;
-}
-.signbutton:hover {
-    width: 48%;
-    height: 38%;
-}
-.copyright {
-    font-size: 5px;
-}
-
-.loginform {
-    padding-top: 15%;
-}
-
 /* PHONE */
 @media screen and (max-width: 800px) {
     .signbutton {
         height: auto;
     }
-    .signbutton:hover {
-        height: auto;
+
+    button:active {
         background-color: rgba(216, 216, 229, 0.301);
     }
+
+    .loginbutton {
+        height: 50px;
+    }
+
     .error {
         position: absolute;
-        bottom: 0;
+        bottom: 10px;
     }
     button {
         height: auto;
@@ -162,6 +175,7 @@ a:hover {
         grid-template-columns: 75%;
         grid-template-rows: 30px 10% 50% 15% 15% 5px;
         text-align: center;
+        font-size: 15px;
     }
     #canv {
         width: 409px;
@@ -174,5 +188,8 @@ a:hover {
     }
     .formprofile {
         padding-top: 40px;
+    }
+    .autographtext {
+        font-size: 15px;
     }
 }
