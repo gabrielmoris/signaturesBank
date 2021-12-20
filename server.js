@@ -255,7 +255,7 @@ app.get(`/profile/edit`, (req, res) => {
         res.redirect("/register");
     }
 });
-
+// some weird behaviours in this part, check it!
 app.post(`/profile/edit`, (req, res) => {
     let urlUser;
     if (!req.body.password) {
@@ -293,14 +293,21 @@ app.post(`/profile/edit`, (req, res) => {
                         data.email,
                         req.session.userId
                     )
-                        .then(() =>
+                        .then(() => {
+                            if (data.urlpage != "") {
+                                if (data.urlpage.startsWith("http")) {
+                                    urlUser = data.urlpage;
+                                } else {
+                                    urlUser = `https\://${data.urlpage}`;
+                                }
+                            }
                             db.editUserData(
                                 data.age,
                                 urlUser,
                                 data.city,
                                 req.session.userId
-                            )
-                        )
+                            );
+                        })
                         .then(() => res.redirect("/petition"));
                 });
             })
