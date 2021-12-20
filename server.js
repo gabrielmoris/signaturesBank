@@ -277,29 +277,31 @@ app.post(`/profile/edit`, (req, res) => {
                     req.session.userId
                 )
             )
-            .then(() => res.redirect("/petition"));
+            .then(() => res.redirect("/petition")).catch((err)=>console.log("Error in nop password /profile/edit", err));
     } else {
         const data = req.body;
         const userPw = data.password;
-        hash(userPw).then((hashedPw) => {
-            db.editPassword(hashedPw, req.session.userId).then(() => {
-                db.editUser(
-                    data.first,
-                    data.last,
-                    data.email,
-                    req.session.userId
-                )
-                    .then(() =>
-                        db.editUserData(
-                            data.age,
-                            urlUser,
-                            data.city,
-                            req.session.userId
-                        )
+        hash(userPw)
+            .then((hashedPw) => {
+                db.editPassword(hashedPw, req.session.userId).then(() => {
+                    db.editUser(
+                        data.first,
+                        data.last,
+                        data.email,
+                        req.session.userId
                     )
-                    .then(() => res.redirect("/petition"));
-            });
-        });
+                        .then(() =>
+                            db.editUserData(
+                                data.age,
+                                urlUser,
+                                data.city,
+                                req.session.userId
+                            )
+                        )
+                        .then(() => res.redirect("/petition"));
+                });
+            })
+            .catch((err) => console.log("Error (with password) in /profile/edit", err));
     }
 });
 //________________________________________________________________________________
