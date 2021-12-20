@@ -257,9 +257,9 @@ app.get(`/profile/edit`, (req, res) => {
 });
 
 app.post(`/profile/edit`, (req, res) => {
+    let urlUser;
     if (!req.body.password) {
         const data = req.body;
-        let urlUser;
         if (data.urlpage != "") {
             if (data.urlpage.startsWith("http")) {
                 urlUser = data.urlpage;
@@ -267,7 +267,7 @@ app.post(`/profile/edit`, (req, res) => {
                 urlUser = `https\://${data.urlpage}`;
             }
         }
-        console.log(urlUser);
+        console.log("USER URL", urlUser);
         db.editUser(data.first, data.last, data.email, req.session.userId)
             .then(() =>
                 db.editUserData(
@@ -277,7 +277,10 @@ app.post(`/profile/edit`, (req, res) => {
                     req.session.userId
                 )
             )
-            .then(() => res.redirect("/petition")).catch((err)=>console.log("Error in nop password /profile/edit", err));
+            .then(() => res.redirect("/petition"))
+            .catch((err) =>
+                console.log("Error in nop password /profile/edit", err)
+            );
     } else {
         const data = req.body;
         const userPw = data.password;
@@ -301,7 +304,7 @@ app.post(`/profile/edit`, (req, res) => {
                         .then(() => res.redirect("/petition"));
                 });
             })
-            .catch((err) => console.log("Error (with password) in /profile/edit", err));
+            .catch((err) => console.log("Error in /profile/edit", err));
     }
 });
 //________________________________________________________________________________
