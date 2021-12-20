@@ -96,12 +96,6 @@ module.exports.getUserByCity = (city) => {
     const params = [city];
     return db.query(q, params);
 };
-//implement later
-// module.exports.deleteUser = (id) => {
-//     const q = `DELETE FROM users WHERE id = $1`;
-//     const params = [id];
-//     return db.query(q, params);
-// };
 
 module.exports.deleteSignature = (user_id) => {
     const q = `DELETE FROM signatures WHERE user_id = $1`;
@@ -131,3 +125,10 @@ module.exports.editPassword = (pass, cookie) => {
     const params = [pass, cookie];
     return db.query(q, params);
 };
+
+
+// module.exports.deleteUser = (id) => {
+//     const q = `DELETE FROM users WHERE id = $1`;
+//     const params = [id];
+//     return db.query(q, params);
+// };

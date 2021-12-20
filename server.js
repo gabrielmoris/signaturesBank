@@ -309,8 +309,7 @@ app.post(`/profile/edit`, (req, res) => {
 //     db.deleteSignature(req.session.userId)
 //         .then(() => db.deleteUser(req.session.userId))
 //         .then(() => {
-//             req.session.auth = false;
-//             req.session.userId = null;
+//              req.session = null;
 //             res.redirect("/register");
 //         });
 // });

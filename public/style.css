@@ -48,9 +48,10 @@ input {
     background-color: #d8d8e5;
 }
 button {
-    width: 80%;
-    height: 75%;
-    font-size: 140%;
+
+    width: 200px;
+    height: 100%;
+    font-size: 150%;
     border-radius: 7px;
 }
 
@@ -95,10 +96,7 @@ button {
 
 /* Navbar */
 #menu2 {
-    /* position: fixed; */
-    /* height: 100%;
-    width: 20%; */
-    /* right: 0; */
+
     display: flex;
     background-color: #2148bf;
     border-radius: 7px;
@@ -131,6 +129,7 @@ a:hover {
     /* justify-content: center; */
     justify-items: center;
 }
+
 /* PHONE */
 @media screen and (max-width: 800px) {
     .signbutton {
